@@ -36,8 +36,12 @@ RUN apk add php7 \
         php7-ldap \
         php7-openssl \
         php7-bcmath \
-	    php7-tokenizer
+        php7-tokenizer \
+        php7-phalcon \
+        php7-xmlwriter \
+        php7-simplexml
 
+RUN docker-php-ext-install mysql_xdevapi
 # 从国内镜像安装composer，并配置成默认从国内镜像安装composer包
 RUN wget -O /bin/composer https://mirrors.aliyun.com/composer/composer.phar 
 RUN chmod +x /bin/composer
@@ -54,18 +58,18 @@ ENV PHP_MAX_POST 100M
 RUN chmod 777 -R /var/log/
 
 RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php7/php-fpm.conf && \
-sed -i -e "s/listen\s*=\s*127.0.0.1:9000/listen = 9000/g" /etc/php7/php-fpm.d/www.conf && \
-sed -i "s|date.timezone =.*|date.timezone = ${TIMEZONE}|" /etc/php7/php.ini && \
-sed -i "s|memory_limit =.*|memory_limit = ${PHP_MEMORY_LIMIT}|" /etc/php7/php.ini && \
-sed -i "s|upload_max_filesize =.*|upload_max_filesize = ${MAX_UPLOAD}|" /etc/php7/php.ini && \
-sed -i "s|max_file_uploads =.*|max_file_uploads = ${PHP_MAX_FILE_UPLOAD}|" /etc/php7/php.ini && \
-sed -i "s|max_execution_time =.*|max_execution_time = ${MAX_EXECUTION_TIME}|" /etc/php7/php.ini && \
-sed -i "s|post_max_size =.*|max_file_uploads = ${PHP_MAX_POST}|" /etc/php7/php.ini && \
-sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php7/php.ini && \
-sed -i "s/error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT/error_reporting = E_ALL/" /etc/php7/php.ini && \
-sed -i "s/display_errors = Off/display_errors = On/" /etc/php7/php.ini && \
-sed -i "s/;catch_workers_output = yes/catch_workers_output = yes/" /etc/php7/php-fpm.conf && \
-sed -i "s/;error_log = php_errors.log/error_log = \/apps\/logs\/php_errors.log/" /etc/php7/php.ini 
+        sed -i -e "s/listen\s*=\s*127.0.0.1:9000/listen = 9000/g" /etc/php7/php-fpm.d/www.conf && \
+        sed -i "s|date.timezone =.*|date.timezone = ${TIMEZONE}|" /etc/php7/php.ini && \
+        sed -i "s|memory_limit =.*|memory_limit = ${PHP_MEMORY_LIMIT}|" /etc/php7/php.ini && \
+        sed -i "s|upload_max_filesize =.*|upload_max_filesize = ${MAX_UPLOAD}|" /etc/php7/php.ini && \
+        sed -i "s|max_file_uploads =.*|max_file_uploads = ${PHP_MAX_FILE_UPLOAD}|" /etc/php7/php.ini && \
+        sed -i "s|max_execution_time =.*|max_execution_time = ${MAX_EXECUTION_TIME}|" /etc/php7/php.ini && \
+        sed -i "s|post_max_size =.*|max_file_uploads = ${PHP_MAX_POST}|" /etc/php7/php.ini && \
+        sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php7/php.ini && \
+        sed -i "s/error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT/error_reporting = E_ALL/" /etc/php7/php.ini && \
+        sed -i "s/display_errors = Off/display_errors = On/" /etc/php7/php.ini && \
+        sed -i "s/;catch_workers_output = yes/catch_workers_output = yes/" /etc/php7/php-fpm.conf && \
+        sed -i "s/;error_log = php_errors.log/error_log = \/apps\/logs\/php_errors.log/" /etc/php7/php.ini 
 
 WORKDIR /apps
 
