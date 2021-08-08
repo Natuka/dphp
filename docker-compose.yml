@@ -18,7 +18,7 @@ services:
     environment:
       # 默认的root密码和需要新建的数据库、用户名、密码，若需要重新设置，需要删除volumes/mysql/下面的全部内容，然后重新build
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=your_db_name
+      - MYSQL_DATABASE=vokuro
       - MYSQL_USER=developer
       - MYSQL_PASSWORD=developer
     restart: always
@@ -31,7 +31,29 @@ services:
     ports:
       - "6379:6379"
     restart: always
-    
+
+  nsqlookupd:
+    image: natuka/nsq
+    command: nsqlookupd
+    ports:
+      - "4160:4160"
+      - "4161:4161"
+  nsqd:
+    image: natuka/nsq
+    command: nsqd --lookupd-tcp-address=nsqlookupd:4160 --broadcast-address=127.0.0.1
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "4150:4150"
+      - "4151:4151"
+  nsqadmin:
+    image: natuka/nsq
+    command: nsqadmin --lookupd-http-address=nsqlookupd:4161
+    depends_on:
+      - nsqlookupd  
+    ports:
+      - "4171:4171"
+
   phpfpm:
     build: phpfpm
     image: water/phpfpm
@@ -42,6 +64,8 @@ services:
       - redis
     volumes:
       - "./volumes/apps:/apps"
+      # - "/Users/naive/app/miracle-top/server-api:/apps/server-api"
+      - "/Users/naive/app/miracle-top/admin-api:/apps/server-api"
     restart: always
 
   nginx:
