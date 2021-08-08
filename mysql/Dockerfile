@@ -5,9 +5,13 @@ RUN apk add mysql mysql-client
 
 # 软件包参数配置
 
-RUN mkdir /run/mysqld/ && mkdir -p /apps/mysql/
+RUN mkdir -p /run/mysqld/ && mkdir -p /apps/mysql/
 COPY my.cnf /etc/mysql/my.cnf
 RUN chmod 644 /etc/mysql/my.cnf
+
+COPY my.cnf /etc/my.cnf
+RUN chmod 644 /etc/my.cnf
+
 COPY init_mysql.sh /apps/
 RUN chmod +x /apps/init_mysql.sh
 COPY import.sql /apps/
