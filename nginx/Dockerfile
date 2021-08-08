@@ -4,8 +4,8 @@ FROM water/alpine
 RUN apk add nginx
 
 # 软件包参数配置
-RUN mkdir /run/nginx
-RUN mkdir /apps
+RUN mkdir -p /run/nginx
+RUN mkdir -p /apps
 RUN mkdir -p /usr/share/nginx/html
 COPY conf/nginx.conf /etc/nginx/
 COPY conf/vhosts.conf /etc/nginx/conf.d/
