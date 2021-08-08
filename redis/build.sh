@@ -6,4 +6,4 @@ docker rm redis
 docker rmi water/redis 
 
 # 重新生成
-docker build -t water/redis ./
+docker build -t water/redis ./ --no-cache
