@@ -1,0 +1,9 @@
+volumes/apps/mcnadminapi
+volumes/apps/phalcon-admin
+volumes/apps/vokuro
+volumes/apps/.DS_Store
+volumes/mysql/*
+.DS_Store
+volumes/apps/logs/access.log
+volumes/apps/logs/error.log
+volumes/apps/logs/*
